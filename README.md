@@ -6,10 +6,11 @@
 
 ## 🚀 Key Features & Business Logic
 
+- **Multi-Tenant Role-Based Access Control (RBAC):** Integrated secure authentication and authorization pipeline where the System Administrator (Admin) holds exclusive privileges to provision user accounts, assign dynamic system roles, and designate whether a user is an **Admin**, a **Receptionist**, or a professional **Doctor**.
 - **Doctors Directory & Registry Management:** Tracks clinical specialties, consultation schedules, availability statuses, and automated financial fee valuations.
-- **Patients Registry & Demographics Indexing:** Comprehensive management of patient medical files, clinical histories, gender-specific demographic attributes, and immediate automated notification dispatch logs.
+- **Patients Registry & Demographics Indexing:** Comprehensive management of patient medical files, clinical histories, gender-specific demographic attributes, and immediate automated notification dispatch logs managed efficiently by Receptionists.
 - **Appointments Architecture:** Advanced relational workflow model binding medical consultants to patients with immutable data integrity constraints.
-- **Consultation Sheets & Medical Records:** Multi-tiered input pipelines for complex clinical diagnoses, detailed dynamic prescription outputs, and medical follow-up registries.
+- **Consultation Sheets & Medical Records:** Multi-tiered input pipelines tailored specifically for Doctor access, allowing complex clinical diagnoses, detailed dynamic prescription outputs, and medical follow-up registries.
 - **Secure Medical Attachment Infrastructure:** Enterprise-ready cryptographic file upload mechanism handling diagnostic reports, digital X-rays, and multi-format medical PDFs with background folder validation and absolute server-side security isolation.
 
 ---
@@ -20,6 +21,7 @@ The application is architected under rigorous software engineering standards, ut
 
 ### Backend Ecosystem
 - **Framework:** .NET 8.0 / 6.0 MVC (Model-View-Controller)
+- **Security & Authorization:** ASP.NET Core Identity (Customized Role Management & Policy Enforcement)
 - **Language:** C# (Asynchronous Background Multi-Threading Execution)
 - **Data Access:** Entity Framework Core (EF Core) via LINQ Queries
 
@@ -29,7 +31,7 @@ The application is architected under rigorous software engineering standards, ut
 - **Data Integrity:** Strict relational integrity mapping with cascade constraint controls
 
 ### Frontend & User Interface
-- **View Engine:** Razor Pages (CSHTML)
+- **View Engine:** Razor Pages (CSHTML) with conditional UI rendering based on User Roles (`@User.IsInRole`)
 - **Design Framework:** Bootstrap 5 (Responsive Layouts)
 - **Iconography:** Bootstrap Icons System
 - **Validation Pipeline:** jQuery Validation Engine & Unobtrusive Client-Side Validation
@@ -44,7 +46,7 @@ The application is architected under rigorous software engineering standards, ut
 
 ## 📦 NuGet Dependencies & Packages Installation
 
-The system leverages verified enterprise packages for database management, validation workflows, and system UI rendering. Run the following installation commands in your Package Manager Console or terminal:
+The system leverages verified enterprise packages for database management, identity handling, validation workflows, and system UI rendering. Run the following installation commands in your Package Manager Console or terminal:
 
 ```bash
 # Install Entity Framework Core Context Engine
@@ -55,6 +57,12 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 8.0.0
 
 # Install Entity Framework Core Tools for Migration Execution
 dotnet add package Microsoft.EntityFrameworkCore.Tools --version 8.0.0
+
+# Install ASP.NET Core Identity Tools for Role Authentication
+dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore --version 8.0.0
+
+# Install Developer Runtime Compilation Support for Razor Pages
+dotnet add package Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation --version 8.0.0
 
 {
   "ConnectionStrings": {
