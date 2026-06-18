@@ -1,0 +1,66 @@
+﻿@model MedCareCore.ViewModels.AppointmentVM
+
+<form method="post">
+    <input asp-for="Appointment.Id" hidden />
+    <input asp-for="Appointment.CreatedAt" hidden />
+
+    <div class="border p-4 mt-4 card shadow-sm">
+        <h2 class="text-primary">Reschedule / Edit Appointment</h2>
+        <hr />
+
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label class="form-label font-weight-bold">Patient</label>
+            <select asp-for="Appointment.PatientId" asp-items="@Model.PatientList" class="form-select">
+                <option disabled>-- Select Patient --</option>
+            </select>
+            <span asp-validation-for="Appointment.PatientId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label font-weight-bold">Doctor</label>
+            <select asp-for="Appointment.DoctorId" asp-items="@Model.DoctorList" class="form-select">
+                <option disabled>-- Select Doctor --</option>
+            </select>
+            <span asp-validation-for="Appointment.DoctorId" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Appointment Date & Time</label>
+                <input asp-for="Appointment.AppointmentDate" class="form-control" type="datetime-local" />
+                <span asp-validation-for="Appointment.AppointmentDate" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label font-weight-bold">Status</label>
+                <select asp-for="Appointment.Status" class="form-select">
+                    <option value="Pending">Pending</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Cancelled">Cancelled</option>
+                    <option value="Completed">Completed</option>
+                </select>
+                <span asp-validation-for="Appointment.Status" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label font-weight-bold">Notes / Reason for update</label>
+            <textarea asp-for="Appointment.Notes" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-primary form-control">Update Appointment</button>
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-action="Index" class="btn btn-outline-secondary form-control">Cancel</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

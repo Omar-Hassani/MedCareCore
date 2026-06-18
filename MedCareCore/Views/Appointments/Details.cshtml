@@ -1,0 +1,79 @@
+﻿@model MedCareCore.Models.Appointment
+
+@{
+    ViewData["Title"] = "Appointment Details";
+}
+
+<div class="container p-3">
+    <div class="card shadow-sm border-0 mt-4">
+        <div class="card-header bg-secondary bg-gradient text-white p-3">
+            <div class="row">
+                <div class="col-6">
+                    <h3 class="mb-0"><i class="bi bi-info-circle"></i> Appointment Sheet</h3>
+                </div>
+                <div class="col-6 text-end">
+                    <span class="fs-5 badge @(Model.Status == "Pending" ? "bg-warning text-dark" :
+                                            Model.Status == "Confirmed" ? "bg-primary" :
+                                            Model.Status == "Completed" ? "bg-success" : "bg-danger")">
+                        @Model.Status
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-4 bg-light">
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="p-3 bg-white border rounded shadow-sm h-100">
+                        <h4 class="text-primary border-bottom pb-2"><i class="bi bi-person"></i> Patient Info</h4>
+                        <p class="mb-2"><strong>Name:</strong> @Model.Patient.Name</p>
+                        <p class="mb-2"><strong>Phone:</strong> @Model.Patient.Phone</p>
+                        <p class="mb-2"><strong>Gender:</strong> @Model.Patient.Gender</p>
+                        <p class="mb-0"><strong>Medical Notes:</strong> @(string.IsNullOrEmpty(Model.Patient.MedicalHistoryNotes) ? "No previous history recorded." : Model.Patient.MedicalHistoryNotes)</p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="p-3 bg-white border rounded shadow-sm h-100">
+                        <h4 class="text-primary border-bottom pb-2"><i class="bi bi-heart-pulse"></i> Assigned Doctor</h4>
+                        <p class="mb-2"><strong>Name:</strong> @Model.Doctor.Name</p>
+                        <p class="mb-2"><strong>Specialization:</strong> @Model.Doctor.Specialization</p>
+                        <p class="mb-2"><strong>Clinic Phone:</strong> @Model.Doctor.Phone</p>
+                        <p class="mb-0"><strong>Consultation Fee:</strong> @Model.Doctor.ConsultationFee.ToString("C")</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-3 bg-white border rounded shadow-sm mt-2">
+                <h4 class="text-primary border-bottom pb-2"><i class="bi bi-clock"></i> Schedule & Complaint</h4>
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <p><strong>Appointment Time:</strong> @Model.AppointmentDate.ToString("f")</p>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <p><strong>Logged into System:</strong> @Model.CreatedAt.ToString("g")</p>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <strong>Chief Complaint / Notes:</strong>
+                    <div class="p-3 bg-light border rounded mt-2 text-muted" style="min-height: 60px;">
+                        @(string.IsNullOrEmpty(Model.Notes) ? "No symptoms or specific notes were provided." : Model.Notes)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-footer p-3 bg-white border-top">
+            <div class="d-flex justify-content-between">
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+                <div>
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary px-4">
+                        <i class="bi bi-pencil-square"></i> Edit / Reschedule
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

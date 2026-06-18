@@ -1,0 +1,291 @@
+﻿@model IEnumerable<MedCareCore.Models.Appointment>
+
+@{
+    ViewData["Title"] = "Dashboard";
+
+    // جلب النسب المئوية للإحصائيات الحيوية وتجنب القسمة على صفر
+    int totalApps = ViewBag.PendingCount + ViewBag.ConfirmedCount + ViewBag.CompletedCount + ViewBag.CancelledCount;
+    double completedPercentage = totalApps > 0 ? Math.Round((double)ViewBag.CompletedCount / totalApps * 100) : 0;
+    double pendingPercentage = totalApps > 0 ? Math.Round((double)ViewBag.PendingCount / totalApps * 100) : 0;
+
+    // 🔥 جلب التنبيهات من الـ ViewBag
+    var notifications = ViewBag.LatestNotifications as List<MedCareCore.Models.Notification>;
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center pt-4 mb-4">
+        <div>
+            <h1 class="text-dark fw-bold mb-0">MedCare Dashboard</h1>
+            <p class="text-muted">Welcome back! Here's what's happening at the clinic today.</p>
+        </div>
+        <div class="text-secondary fw-semibold bg-white p-2 border rounded shadow-sm">
+            <i class="bi bi-calendar3"></i> Today: @DateTime.Today.ToString("dd MMMM, yyyy")
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-0 border-start border-primary border-4 shadow-sm h-100 py-2">
+                <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                        <div class="col me-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Doctors</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalDoctors</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-heart-pulse-fill text-primary fs-1 opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-0 border-start border-success border-4 shadow-sm h-100 py-2">
+                <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                        <div class="col me-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Registered Patients</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalPatients</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-people-fill text-success fs-1 opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-0 border-start border-info border-4 shadow-sm h-100 py-2">
+                <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                        <div class="col me-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Today's Appointments</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TodayAppointmentsCount</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-calendar-check-fill text-info fs-1 opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-0 border-start border-warning border-4 shadow-sm h-100 py-2">
+                <div class="card-body">
+                    <div class="row align-items-center no-gutters">
+                        <div class="col me-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Completion Rate</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@completedPercentage%</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="bi bi-graph-up-arrow text-warning fs-1 opacity-25"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xl-8 col-lg-7 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="m-0 font-weight-bold text-primary"><i class="bi bi-clock-history"></i> Today's Live Schedule</h5>
+                    <a asp-controller="Appointments" asp-action="Create" class="btn btn-sm btn-outline-primary"><i class="bi bi-plus"></i> Book Now</a>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-3">Time</th>
+                                    <th>Patient</th>
+                                    <th>Doctor</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (!Model.Any())
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center py-5 text-muted">
+                                            <i class="bi bi-calendar-x fs-3 d-block mb-2"></i> No appointments scheduled for today.
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    @foreach (var app in Model)
+                                    {
+                                        <tr>
+                                            <td class="ps-3 fw-semibold">@app.AppointmentDate.ToString("hh:mm tt")</td>
+                                            <td>@app.Patient?.Name</td>
+                                            <td>Dr. @app.Doctor?.Name</td>
+                                            <td>
+                                                <span class="badge @(app.Status == "Pending" ? "bg-warning text-dark" :
+                                                                      app.Status == "Confirmed" ? "bg-primary" :
+                                                                      app.Status == "Completed" ? "bg-success" : "bg-danger")">
+                                                    @app.Status
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4 col-lg-5 mb-4">
+
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0 fw-bold" style="font-size: 1.1rem;">
+                        <i class="bi bi-bell-fill animated-bell"></i> Live Notifications
+                    </h5>
+                    @if (notifications != null && notifications.Count > 0)
+                    {
+                        <span class="badge bg-danger rounded-pill">@notifications.Count New</span>
+                    }
+                </div>
+                <div class="card-body p-0" style="max-height: 280px; overflow-y: auto;">
+                    @if (notifications == null || !notifications.Any())
+                    {
+                        <div class="text-center py-4 text-muted">
+                            <i class="bi bi-bell-slash fs-3 d-block mb-1"></i>
+                            <span class="small">No new activities recorded.</span>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var notif in notifications)
+                            {
+                                <div class="list-group-item p-3 border-bottom position-relative bg-light bg-opacity-10">
+                                    <div class="d-flex w-100 justify-content-between align-items-center mb-1">
+                                        <h6 class="mb-0 fw-bold text-dark small text-truncate" style="max-width: 70%;">
+                                            <i class="bi bi-envelope-open-fill text-warning me-1"></i> @notif.Title
+                                        </h6>
+                                        <small class="text-muted rounded-pill" style="font-size: 0.7rem;">
+                                            <i class="bi bi-clock"></i> @notif.CreatedAt.ToString("hh:mm tt")
+                                        </small>
+                                    </div>
+                                    <p class="mb-1 text-secondary text-break" style="font-size: 0.8rem; line-height: 1.3;">
+                                        @notif.Message
+                                    </p>
+                                    <small class="text-primary d-block mt-1" style="font-size: 0.7rem; font-weight: 500;">
+                                        <i class="bi bi-person"></i> To: @notif.TargetUserEmail
+                                    </small>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white border-bottom py-3">
+                    <h5 class="m-0 font-weight-bold text-primary"><i class="bi bi-pie-chart-fill"></i> Appointments Overview</h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small">Distribution of all system appointments by status:</p>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between small fw-bold mb-1">
+                            <span>Completed Consultations</span>
+                            <span>@ViewBag.CompletedCount</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: @(totalApps > 0 ? ((double)ViewBag.CompletedCount/totalApps*100) : 0)%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between small fw-bold mb-1">
+                            <span>Confirmed (Upcoming)</span>
+                            <span>@ViewBag.ConfirmedCount</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: @(totalApps > 0 ? ((double)ViewBag.ConfirmedCount/totalApps*100) : 0)%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between small fw-bold mb-1">
+                            <span>Pending Review</span>
+                            <span>@ViewBag.PendingCount</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: @(totalApps > 0 ? ((double)ViewBag.PendingCount/totalApps*100) : 0)%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mb-1">
+                        <div class="d-flex justify-content-between small fw-bold mb-1">
+                            <span>Cancelled Slots</span>
+                            <span>@ViewBag.CancelledCount</span>
+                        </div>
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-danger" role="progressbar" style="width: @(totalApps > 0 ? ((double)ViewBag.CancelledCount/totalApps*100) : 0)%"></div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-top text-center text-muted small">
+                        Total logged bookings: <strong>@totalApps</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* تأثير حركة جرس التنبيهات العلوية *@
+<style>
+    .animated-bell {
+        display: inline-block;
+        animation: ring 2.5s ease-in-out infinite;
+    }
+
+    @@keyframes ring {
+        0% {
+            transform: rotate(0);
+        }
+
+        5% {
+            transform: rotate(15deg);
+        }
+
+        10% {
+            transform: rotate(-15deg);
+        }
+
+        15% {
+            transform: rotate(10deg);
+        }
+
+        20% {
+            transform: rotate(-10deg);
+        }
+
+        25% {
+            transform: rotate(5deg);
+        }
+
+        30% {
+            transform: rotate(-5deg);
+        }
+
+        35% {
+            transform: rotate(0);
+        }
+
+        100% {
+            transform: rotate(0);
+        }
+    }
+</style>

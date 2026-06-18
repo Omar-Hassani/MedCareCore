@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<ul class="navbar-nav px-2">
+    @if (SignInManager.IsSignedIn(User))
+    {
+        <li class="nav-item d-flex align-items-center me-3">
+            <span class="nav-link text-dark fw-semibold">
+                <i class="bi bi-person-circle text-primary"></i> Hello, @User.Identity?.Name
+            </span>
+        </li>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-success fw-bold" asp-controller="Account" asp-action="Register">
+                    <i class="bi bi-person-plus-fill"></i> Register Staff
+                </a>
+            </li>
+        }
+
+        <li class="nav-item">
+            <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
+                <button type="submit" class="nav-link btn btn-link text-danger fw-semibold border-0 py-2">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
+            </form>
+        </li>
+    }
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link text-primary fw-bold fs-6 px-3 border border-primary rounded-pill bg-light" asp-controller="Account" asp-action="Login">
+                <i class="bi bi-shield-lock-fill"></i> Portal Login
+            </a>
+        </li>
+    }
+</ul>

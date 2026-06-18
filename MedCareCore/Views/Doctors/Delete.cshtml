@@ -1,0 +1,43 @@
+﻿@model MedCareCore.Models.Doctor
+
+@{
+    ViewData["Title"] = "Delete Doctor Profile";
+}
+
+<form method="post" asp-action="Delete">
+    <input asp-for="Id" hidden />
+
+    <div class="border p-4 mt-4 card shadow-sm border-danger">
+        <div class="row pb-2">
+            <h2 class="text-danger">Are you sure you want to delete this doctor?</h2>
+            <p class="text-muted">This action cannot be undone and will permanently remove the record.</p>
+            <hr />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label font-weight-bold"></label>
+            <input asp-for="Name" class="form-control" disabled />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Specialization" class="form-label font-weight-bold"></label>
+            <input asp-for="Specialization" class="form-control" disabled />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Phone" class="form-label font-weight-bold"></label>
+            <input asp-for="Phone" class="form-control" disabled />
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-danger form-control">Confirm Delete</button>
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-controller="Doctors" asp-action="Index" class="btn btn-outline-secondary form-control">
+                    Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</form>

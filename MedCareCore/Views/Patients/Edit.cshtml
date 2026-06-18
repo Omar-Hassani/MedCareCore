@@ -1,0 +1,80 @@
+﻿@model MedCareCore.Models.Patient
+
+@{
+    ViewData["Title"] = "Edit Patient Details";
+}
+
+<form method="post">
+    <input asp-for="Id" hidden />
+
+    <div class="border p-4 mt-4 card shadow-sm">
+        <div class="row pb-2">
+            <h2 class="text-primary">Edit Patient Information</h2>
+            <hr />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label font-weight-bold"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Email" class="form-label font-weight-bold"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label asp-for="DateOfBirth" class="form-label font-weight-bold"></label>
+                <input asp-for="DateOfBirth" class="form-control" type="date" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label asp-for="Gender" class="form-label font-weight-bold"></label>
+                <select asp-for="Gender" class="form-select">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Phone" class="form-label font-weight-bold"></label>
+            <input asp-for="Phone" class="form-control" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Address" class="form-label font-weight-bold"></label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="MedicalHistoryNotes" class="form-label font-weight-bold"></label>
+            <textarea asp-for="MedicalHistoryNotes" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="MedicalHistoryNotes" class="text-danger"></span>
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-primary form-control">Update</button>
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-controller="Patients" asp-action="Index" class="btn btn-outline-secondary form-control">
+                    Cancel
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

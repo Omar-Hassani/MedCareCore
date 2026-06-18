@@ -1,0 +1,44 @@
+﻿@model MedCareCore.ViewModels.AppointmentVM
+
+<form method="post">
+    <div class="border p-4 mt-4 card">
+        <h2 class="text-primary">Book Appointment</h2>
+        <hr />
+
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <div class="mb-3">
+            <label>Select Patient</label>
+            <select asp-for="Appointment.PatientId" asp-items="@Model.PatientList" class="form-select">
+                <option disabled selected>-- Select Patient --</option>
+            </select>
+            <span asp-validation-for="Appointment.PatientId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>Select Doctor</label>
+            <select asp-for="Appointment.DoctorId" asp-items="@Model.DoctorList" class="form-select">
+                <option disabled selected>-- Select Doctor --</option>
+            </select>
+            <span asp-validation-for="Appointment.DoctorId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>Date & Time</label>
+            <input asp-for="Appointment.AppointmentDate" class="form-control" type="datetime-local" />
+            <span asp-validation-for="Appointment.AppointmentDate" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label>Notes / Complaint</label>
+            <textarea asp-for="Appointment.Notes" class="form-control" rows="2"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Confirm Booking</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

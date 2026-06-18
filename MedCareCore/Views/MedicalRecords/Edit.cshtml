@@ -1,0 +1,85 @@
+﻿@model MedCareCore.Models.MedicalRecord
+
+@{
+    ViewData["Title"] = "Modify Medical Record";
+}
+
+<div class="container p-3">
+    <form method="post" enctype="multipart/form-data">
+        <input asp-for="Id" hidden />
+        <input asp-for="CreatedAt" hidden />
+
+        <input type="hidden" asp-for="AttachmentFilePath" />
+
+        <div class="border p-4 mt-4 card shadow-sm border-0">
+            <div class="border-bottom pb-2 mb-4">
+                <h2 class="text-primary"><i class="bi bi-eraser-fill"></i> Modify Consultation Sheet</h2>
+                <p class="text-muted mb-0">Update diagnosis or prescription details for this existing clinical entry.</p>
+            </div>
+
+            <div class="text-danger mb-3" asp-validation-summary="All"></div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold text-muted">Linked Appointment (Locked for Integrity)</label>
+                <select class="form-select bg-light text-dark" style="pointer-events: none;" readonly asp-for="AppointmentId" asp-items="@(ViewBag.AppointmentList as IEnumerable<SelectListItem>)"></select>
+                <input type="hidden" asp-for="AppointmentId" />
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold" asp-for="Diagnosis"></label>
+                <textarea class="form-control" rows="3" asp-for="Diagnosis"></textarea>
+                <span class="text-danger" asp-validation-for="Diagnosis"></span>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label fw-bold" asp-for="Prescription"></label>
+                <textarea class="form-control font-monospace" rows="4" asp-for="Prescription"></textarea>
+                <span class="text-danger" asp-validation-for="Prescription"></span>
+            </div>
+
+            <div class="row">
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label class="form-label fw-bold text-secondary">
+                            <i class="bi bi-file-earmark-arrow-up-fill text-primary"></i> رفع المرفقات الطبية (صور أشعة، تحاليل PDF)
+                        </label>
+
+                        <input class="form-control shadow-sm border-primary-subtle" type="file" name="uploadedFile" accept=".pdf,.jpg,.jpeg,.png" />
+
+                        @if (!string.IsNullOrEmpty(Model.AttachmentFilePath))
+                        {
+                            <div class="text-success small mt-1fw-bold">
+                                <i class="bi bi-paperclip"></i> يوجد ملف مرفق مسبقاً لهذا السجل الطبي في النظام.
+                            </div>
+                        }
+
+                        <div class="form-text text-muted small mt-1">
+                            * الصيغ المسموح بها: PDF, JPG, PNG. يتم تشفير اسم الملف وتخزينه بشكل آمن على السيرفر.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold" asp-for="FollowUpNotes"></label>
+                    <input class="form-control" asp-for="FollowUpNotes" />
+                    <span class="text-danger" asp-validation-for="FollowUpNotes"></span>
+                </div>
+            </div>
+
+            <div class="row pt-3 border-top mt-4">
+                <div class="col-6 col-md-3">
+                    <button class="btn btn-primary form-control shadow-sm" type="submit">
+                        <i class="bi bi-save"></i> Save Changes
+                    </button>
+                </div>
+                <div class="col-6 col-md-3">
+                    <a class="btn btn-outline-secondary form-control" asp-action="Index">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

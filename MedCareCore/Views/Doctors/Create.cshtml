@@ -1,0 +1,60 @@
+﻿@model MedCareCore.Models.Doctor
+
+@{
+    ViewData["Title"] = "Add New Doctor";
+}
+
+<form method="post">
+    <div class="border p-4 mt-4 card shadow-sm">
+        <div class="row pb-2">
+            <h2 class="text-primary">Add a New Doctor</h2>
+            <hr />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label font-weight-bold"></label>
+            <input asp-for="Name" class="form-control" placeholder="Enter doctor's full name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Specialization" class="form-label font-weight-bold"></label>
+            <input asp-for="Specialization" class="form-control" placeholder="e.g., Cardiology, Pediatrics" />
+            <span asp-validation-for="Specialization" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ConsultationFee" class="form-label font-weight-bold"></label>
+            <input asp-for="ConsultationFee" class="form-control" type="number" step="0.01" />
+            <span asp-validation-for="ConsultationFee" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Phone" class="form-label font-weight-bold"></label>
+            <input asp-for="Phone" class="form-control" placeholder="09xxxxxxxx" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 form-check form-switch">
+            <input asp-for="IsAvailable" class="form-check-input" type="checkbox" checked />
+            <label asp-for="IsAvailable" class="form-check-label">Doctor is Active & Available</label>
+        </div>
+
+        <div class="row pt-2">
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-primary form-control">Save</button>
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-controller="Doctors" asp-action="Index" class="btn btn-outline-secondary form-control">
+                    Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

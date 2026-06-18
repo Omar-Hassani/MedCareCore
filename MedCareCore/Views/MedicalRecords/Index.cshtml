@@ -1,0 +1,91 @@
+﻿@model IEnumerable<MedCareCore.Models.MedicalRecord>
+
+@{
+    ViewData["Title"] = "Medical Records";
+}
+
+<div class="container p-3">
+    <div class="row pt-4 mb-3 align-items-center">
+        <div class="col-6">
+            <h2 class="text-primary"><i class="bi bi-file-earmark-medical-fill"></i> Medical Records & Consultations</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-action="Create" class="btn btn-primary shadow-sm">
+                <i class="bi bi-plus-circle"></i> New Consultation Sheet
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <table class="table table-bordered table-striped table-hover align-middle" style="width:100%">
+                <thead class="bg-white text-dark">
+                    <tr>
+                        <th class="ps-3">Date & Time</th>
+                        <th>Patient Name</th>
+                        <th>Attending Doctor</th>
+                        <th>Diagnosis Preview</th>
+                        <th class="text-center" style="width: 30%">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">
+                                <i class="bi bi-folder-x fs-2 d-block mb-2"></i> No medical records found.
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-3 text-secondary" style="font-size: 0.9rem;">@item.CreatedAt.ToString("g")</td>
+                                <td><strong>@item.Appointment?.Patient?.Name</strong></td>
+                                <td><span class="text-secondary">Dr.</span> @item.Appointment?.Doctor?.Name</td>
+                                <td class="text-truncate" style="max-width: 220px;">@item.Diagnosis</td>
+                                <td class="text-center">
+
+                                    <div class="d-flex align-items-center justify-content-center gap-2" style="white-space: nowrap;">
+
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-info btn-sm text-white shadow-sm rounded-pill px-3">
+                                            <i class="bi bi-eye"></i> Details
+                                        </a>
+
+                                        @if (!string.IsNullOrEmpty(item.AttachmentFilePath))
+                                        {
+                                            <a asp-action="DownloadAttachment" asp-route-id="@item.Id" target="_blank" class="btn btn-sm btn-primary shadow-sm rounded-pill px-2" title="استعراض المرفق الطبي">
+                                                <i class="bi bi-file-earmark-medical-fill"></i> M
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-sm btn-light text-muted border shadow-sm rounded-pill px-2" disabled title="لا يوجد مرفقات">
+                                                <i class="bi bi-file-earmark-x"></i>
+                                            </button>
+                                        }
+
+                                        <a asp-action="PrintPrescription" asp-route-id="@item.Id" class="btn btn-sm btn-success text-white shadow-sm rounded-pill px-3" target="_blank">
+                                            <i class="bi bi-printer"></i> طباعة الروشتة
+                                        </a>
+
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning btn-sm text-white shadow-sm rounded-pill px-3">
+                                            <i class="bi bi-pencil-square"></i> Edit
+                                        </a>
+
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm shadow-sm rounded-pill px-3">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </a>
+
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
